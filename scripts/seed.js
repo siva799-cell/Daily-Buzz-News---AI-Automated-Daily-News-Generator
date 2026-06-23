@@ -13,9 +13,11 @@ const envPath = path.resolve(process.cwd(), '.env');
 if (fs.existsSync(envPath)) {
   const envConfig = fs.readFileSync(envPath, 'utf8');
   envConfig.split('\n').forEach((line) => {
-    const parts = line.split('=');
-    if (parts.length === 2) {
-      process.env[parts[0].trim()] = parts[1].trim();
+    const eqIndex = line.indexOf('=');
+    if (eqIndex !== -1) {
+      const key = line.substring(0, eqIndex).trim();
+      const value = line.substring(eqIndex + 1).trim();
+      process.env[key] = value;
     }
   });
 }
