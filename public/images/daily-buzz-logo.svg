@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 140">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F58C3E" />
+      <stop offset="100%" stop-color="#FFB257" />
+    </linearGradient>
+  </defs>
+  <rect width="500" height="140" fill="transparent" rx="24" />
+  <g transform="translate(20, 20)">
+    <circle cx="50" cy="50" r="50" fill="#F58C3E" />
+    <path d="M26 48h48M26 58h48M26 38h32" stroke="#fff" stroke-width="6" stroke-linecap="round" />
+    <path d="M38 70h24" stroke="#fff" stroke-width="6" stroke-linecap="round" />
+    <path d="M48 20v18" stroke="#fff" stroke-width="6" stroke-linecap="round" />
+    <path d="M60 20v18" stroke="#fff" stroke-width="6" stroke-linecap="round" />
+  </g>
+  <g transform="translate(120, 36)">
+    <text x="0" y="30" font-family="Inter, sans-serif" font-size="48" font-weight="800" fill="#222">Daily</text>
+    <text x="0" y="75" font-family="Inter, sans-serif" font-size="48" font-weight="800" fill="#222">buzz</text>
+  </g>
+  <rect x="320" y="40" width="140" height="44" rx="12" fill="url(#grad)" />
+  <text x="390" y="72" font-family="Inter, sans-serif" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">NEWS</text>
+</svg>

@@ -1,26 +1,53 @@
+@import url('https://fonts.cdnfonts.com/css/campton');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FAF7F0;
+  --foreground: #1E2929;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: 'Campton', sans-serif;
+  --font-mono: 'Campton', sans-serif;
+  
+  /* Custom colors matching the design image */
+  --color-brand-yellow: #ECC02B;
+  --color-brand-yellow-dark: #DCAE1D;
+  --color-brand-slate: #4F6262;
+  --color-brand-slate-dark: #374444;
+  --color-brand-slate-light: #E4EBE9;
+  --color-brand-beige: #FAF7F0;
+  --color-brand-cream: #F4EBD0;
+  --color-brand-dark: #1E2929;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #182222;
+    --foreground: #FAF7F0;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Campton', sans-serif;
 }
+
+.font-serif,
+.font-sans,
+.font-mono,
+[class*='font-'] {
+  font-family: 'Campton', sans-serif !important;
+}
+
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
