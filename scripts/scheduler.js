@@ -22,17 +22,50 @@ console.log('   DAILY BUZZ NEWS FACT AGGREGATOR LOCAL SCHEDULER    ');
 console.log('==================================================');
 console.log(`Target Scraper Endpoint: ${CRON_URL}`);
 
-// Target Time: June 24, 2026 12:00 AM IST (+05:30)
-const TARGET_TIME = new Date('2026-06-24T00:00:00+05:30');
-console.log(`Current Time: ${new Date().toString()}`);
-console.log(`Target Start Time: ${TARGET_TIME.toString()}`);
+function getNextRunTime() {
+  const now = new Date();
+  const nextRun = new Date(now);
+  nextRun.setHours(6, 0, 0, 0);
+
+  if (now.getHours() > 6 || (now.getHours() === 6 && (now.getMinutes() > 0 || now.getSeconds() > 0 || now.getMilliseconds() > 0))) {
+    nextRun.setDate(nextRun.getDate() + 1);
+  }
+
+  return nextRun;
+}
+
+function scheduleNextRun() {
+  const nextRunTime = getNextRunTime();
+  const now = new Date();
+  const isPastSix = now.getHours() > 6 || (now.getHours() === 6 && (now.getMinutes() > 0 || now.getSeconds() > 0 || now.getMilliseconds() > 0));
+
+  if (isPastSix) {
+    console.log(`[${now.toLocaleString()}] Current time is past 6:00 AM, so the update is running immediately.`);
+    triggerScraper();
+    setTimeout(scheduleNextRun, 60 * 1000);
+    return;
+  }
+
+  const delay = nextRunTime.getTime() - Date.now();
+
+  console.log(`Next scheduled update: ${nextRunTime.toLocaleString()}`);
+  console.log(`Time remaining: ${Math.round(delay / 1000 / 60)} minutes (${Math.round(delay / 1000)} seconds)...`);
+
+  setTimeout(() => {
+    console.log(`[${new Date().toLocaleString()}] Scheduled 6:00 AM target reached!`);
+    triggerScraper();
+    scheduleNextRun();
+  }, delay);
+}
 
 async function triggerScraper() {
   console.log(`[${new Date().toLocaleString()}] Triggering news scraper...`);
-  
+
   const req = http.get(CRON_URL, (res) => {
     let data = '';
-    res.on('data', (chunk) => { data += chunk; });
+    res.on('data', (chunk) => {
+      data += chunk;
+    });
     res.on('end', () => {
       console.log(`[${new Date().toLocaleString()}] Scraper response status: ${res.statusCode}`);
       try {
@@ -51,31 +84,4 @@ async function triggerScraper() {
   });
 }
 
-function startRecursiveScheduler() {
-  console.log(`[${new Date().toLocaleString()}] Recursive scraper cycle started (Running every 24 hours).`);
-  // Run immediately when scheduled time hits
-  triggerScraper();
-  
-  // Set interval for every 24 hours
-  const INTERVAL_24H = 24 * 60 * 60 * 1000;
-  setInterval(() => {
-    console.log(`[${new Date().toLocaleString()}] Scheduled 24-hour scraper trigger.`);
-    triggerScraper();
-  }, INTERVAL_24H);
-}
-
-const delay = TARGET_TIME.getTime() - Date.now();
-
-if (delay > 0) {
-  console.log(`Waiting for scheduled start time: ${TARGET_TIME.toLocaleString()}`);
-  console.log(`Time remaining: ${Math.round(delay / 1000 / 60)} minutes (${Math.round(delay / 1000)} seconds)...`);
-  
-  setTimeout(() => {
-    console.log(`[${new Date().toLocaleString()}] Scheduled target time reached!`);
-    startRecursiveScheduler();
-  }, delay);
-} else {
-  console.log(`Target time ${TARGET_TIME.toLocaleString()} is already in the past.`);
-  console.log(`Starting recursive scheduler immediately.`);
-  startRecursiveScheduler();
-}
+scheduleNextRun();

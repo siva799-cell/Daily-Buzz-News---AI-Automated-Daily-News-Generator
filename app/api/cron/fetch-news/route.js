@@ -30,9 +30,14 @@ export async function GET(request) {
   // Optional security token check to prevent unauthorized runs in production
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');
-  
-  if (process.env.CRON_SECRET && secret !== process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const headerSecret = request.headers.get('x-cron-secret') || request.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
+  const isVercelCron = request.headers.get('x-vercel-cron') === '1';
+
+  if (process.env.CRON_SECRET) {
+    const expectedSecret = process.env.CRON_SECRET;
+    if (secret !== expectedSecret && headerSecret !== expectedSecret && !isVercelCron) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
   }
 
   const log = new FetchLog({ startedAt: new Date(), status: 'running' });
@@ -158,7 +163,7 @@ export async function GET(request) {
           publishedAt: item.publishedAt,
           fetchedAt: new Date(),
           aiGeneratedAt: new Date(),
-          status: aiPost.confidenceScore >= 60 ? 'pending' : 'rejected', // Auto-reject extremely low confidence score
+          status: 'approved',
           confidenceScore: aiPost.confidenceScore,
           verificationSources: finalVerificationSources,
           isDuplicate: false,

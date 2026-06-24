@@ -290,15 +290,6 @@ export default function SinglePostPage() {
           </div>
         </div>
         
-        {/* Companion Ad Slot beside the image */}
-        <div className="md:col-span-1 flex items-stretch">
-          <div className="w-full rounded-3xl border border-dashed border-zinc-300 bg-white p-5 text-center hover:bg-zinc-50 transition-all duration-300 flex flex-col justify-center items-center gap-2 shadow-sm min-h-[200px]">
-            <span className="text-[8px] font-bold text-zinc-400 tracking-widest uppercase">{t('sponsoredAd', language)}</span>
-            <DollarSign className="h-5 w-5 text-emerald-700 animate-bounce" />
-            <div className="text-xs font-bold text-zinc-700">Display Companion Space</div>
-            <span className="rounded bg-emerald-50 px-2 py-0.5 text-[9px] font-bold text-emerald-700">300 x 250 / Auto</span>
-          </div>
-        </div>
       </div>
 
       {/* Summary grid */}
